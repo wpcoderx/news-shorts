@@ -139,7 +139,7 @@ export default function Home() {
                       className="object-cover w-full h-64" // Adjust height as needed
                     />
                     <CardContent className="p-4">
-                      <div className="text-lg font-semibold flex items-center justify-between">
+                      <div className="text-lg font-semibold flex items-center">
                         <Avatar className="h-6 w-6 mr-2">
                             <AvatarImage src={`https://picsum.photos/id/${index + 20}/50/50`} alt={news.publisher} />
                               <AvatarFallback>{news.publisher.substring(0, 2)}</AvatarFallback>
@@ -183,3 +183,4 @@ export default function Home() {
     </div>
   );
 }
+
