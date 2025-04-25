@@ -42,22 +42,16 @@ export interface Publisher {
  * @returns A promise that resolves to an array of NewsSnippet objects.
  */
 export async function getNewsSnippets(publisherName: string): Promise<NewsSnippet[]> {
-  // TODO: Implement this by calling an API.
-
-  return [
-    {
-      title: 'Sample News Title 1 from ' + publisherName,
-      snippet: 'This is a sample news snippet from ' + publisherName + '. It is limited to 200 characters. '.repeat(2).substring(0, 200),
-      url: 'https://example.com/news1',
-      date: '2024-01-26'
-    },
-    {
-      title: 'Sample News Title 2 from ' + publisherName,
-      snippet: 'This is another sample news snippet from ' + publisherName + '. It is also limited to 200 characters. '.repeat(2).substring(0, 200),
-      url: 'https://example.com/news2',
-      date: '2024-01-25'
-    }
-  ];
+  const snippets: NewsSnippet[] = [];
+  for (let i = 1; i <= 50; i++) {
+    snippets.push({
+      title: `News Title ${i} from ${publisherName}`,
+      snippet: `This is news snippet ${i} from ${publisherName}. It is limited to 200 characters. `.repeat(2).substring(0, 200),
+      url: `https://example.com/news${i}`,
+      date: `2024-01-${20 + i}`
+    });
+  }
+  return snippets;
 }
 
 /**
@@ -83,3 +77,5 @@ export async function getPublishers(): Promise<Publisher[]> {
     }
   ];
 }
+
+    
