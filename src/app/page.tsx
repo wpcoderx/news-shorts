@@ -134,11 +134,6 @@ export default function Home() {
                   <Card className="w-full max-w-md bg-card text-card-foreground shadow-md rounded-lg overflow-hidden">
                     <CardHeader className="flex items-center space-x-4 p-4">
                       <CardTitle className="text-lg font-semibold flex items-center">
-                        <img
-                          src={publishers.find(p => p.name === news.publisher)?.logoUrl || "https://via.placeholder.com/40"}
-                          alt={news.publisher}
-                          className="rounded-full w-8 h-8 mr-2"
-                        />
                         {news.publisher}
                       </CardTitle>
                     </CardHeader>
