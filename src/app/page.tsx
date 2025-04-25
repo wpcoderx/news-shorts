@@ -6,6 +6,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/compo
 import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
+import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 2;
 
@@ -69,8 +70,12 @@ export default function Home() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">NewsFlash</h1>
         <div className="flex gap-2">
-          <Button variant="outline">Login</Button>
-          <Button>Register</Button>
+          <Link href="/login">
+            <Button variant="outline">Login</Button>
+          </Link>
+          <Link href="/register">
+            <Button>Register</Button>
+          </Link>
         </div>
       </div>
       <div className="w-full">
@@ -140,3 +145,4 @@ export default function Home() {
     </div>
   );
 }
+
