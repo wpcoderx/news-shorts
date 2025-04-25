@@ -9,6 +9,7 @@ import './globals.css';
 import Link from 'next/link';
 import {ThumbsUp, ThumbsDown, Bookmark, Menu} from 'lucide-react';
 import {Sheet, SheetContent, SheetTrigger} from '@/components/ui/sheet';
+import {Avatar, AvatarImage, AvatarFallback} from '@/components/ui/avatar';
 
 const ITEMS_PER_PAGE = 2;
 
@@ -138,8 +139,12 @@ export default function Home() {
                       className="object-cover w-full h-64" // Adjust height as needed
                     />
                     <CardContent className="p-4">
-                      <div className="text-lg font-semibold flex items-center">
+                      <div className="text-lg font-semibold flex items-center justify-between">
                         {news.publisher}
+                         <Avatar className="h-6 w-6">
+                            <AvatarImage src={`https://picsum.photos/id/${index + 20}/50/50`} alt={news.publisher} />
+                              <AvatarFallback>{news.publisher.substring(0, 2)}</AvatarFallback>
+                          </Avatar>
                       </div>
                       <CardDescription className="text-sm">{news.snippet}</CardDescription>
                       <div className="mt-2 text-xs text-muted-foreground">
