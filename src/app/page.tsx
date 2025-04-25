@@ -7,9 +7,12 @@ import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
 import Link from 'next/link';
-import {ThumbsUp, ThumbsDown, Bookmark, Menu} from 'lucide-react';
+import {ThumbsUp, ThumbsDown, Bookmark, Menu, MessageSquare} from 'lucide-react';
 import {Sheet, SheetContent, SheetTrigger} from '@/components/ui/sheet';
 import {Avatar, AvatarImage, AvatarFallback} from '@/components/ui/avatar';
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
+import {Input} from '@/components/ui/input';
+import {Textarea} from '@/components/ui/textarea';
 
 const ITEMS_PER_PAGE = 2;
 
@@ -25,7 +28,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 // Function to generate a variety of content types
 function generateDynamicContent(index: number): React.ReactNode {
-  const contentType = index % 5; // Cycle through 5 types of content
+  const contentType = index % 6; // Cycle through 6 types of content
   const baseText = `This is dynamic content ${index + 1}. `;
 
   switch (contentType) {
@@ -44,12 +47,20 @@ function generateDynamicContent(index: number): React.ReactNode {
           <cite>- Someone</cite>
         </blockquote>
       );
-    case 2: // Poll (Placeholder)
+    case 2: // Radio Poll
       return (
         <div>
           <p>{baseText} Vote now!</p>
-          <Button>Option A</Button>
-          <Button>Option B</Button>
+          <RadioGroup defaultValue="optionA" className="flex flex-col gap-2">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="optionA" id={`poll-${index}-a`} />
+              <label htmlFor={`poll-${index}-a`}>Option A</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="optionB" id={`poll-${index}-b`} />
+              <label htmlFor={`poll-${index}-b`}>Option B</label>
+            </div>
+          </RadioGroup>
         </div>
       );
     case 3: // Paragraph with emphasis
@@ -57,6 +68,13 @@ function generateDynamicContent(index: number): React.ReactNode {
         <p>
           {baseText} <em>Important information here.</em>
         </p>
+      );
+    case 4: // Text input
+      return (
+        <div>
+          <p>{baseText} Enter your thoughts:</p>
+          <Input type="text" placeholder="Your input here" className="mt-2" />
+        </div>
       );
     default: // Regular paragraph
       return <p>{baseText} Just a regular snippet.</p>;
@@ -179,13 +197,14 @@ export default function Home() {
                       className="object-cover w-full h-64" // Adjust height as needed
                     />
                     <CardContent className="p-4">
-                      <div className="text-lg font-semibold flex items-center">
+                      <div className="text-lg font-semibold flex items-center mb-2">
                         <Avatar className="h-6 w-6 mr-2">
                             <AvatarImage src={`https://picsum.photos/id/${index + 20}/50/50`} alt={news.publisher} />
                               <AvatarFallback>{news.publisher.substring(0, 2)}</AvatarFallback>
                           </Avatar>
                         {news.publisher}
                       </div>
+                      <div className="text-xl font-semibold">{news.title}</div>
                       {/* Use dynamic content here */}
                       <CardDescription className="text-sm">
                         {generateDynamicContent(index)}
@@ -203,6 +222,22 @@ export default function Home() {
                         <Button variant="ghost" size="icon">
                           <Bookmark className="h-5 w-5" />
                         </Button>
+                        <Sheet>
+                          <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MessageSquare className="h-5 w-5" />
+                            </Button>
+                          </SheetTrigger>
+                          <SheetContent side="right" className="w-96">
+                            <h2 className="text-lg font-semibold mb-4">Comments</h2>
+                            <Textarea placeholder="Add your comment here" className="mb-2" />
+                            <Button>Post Comment</Button>
+                            <Separator className="my-4" />
+                            <div>
+                              <p>No comments yet.</p>
+                            </div>
+                          </SheetContent>
+                        </Sheet>
                       </div>
                       {/* Ad space inside each card */}
                       <div className="mt-4 p-2 bg-muted rounded-md text-center text-xs">
