@@ -7,7 +7,8 @@ import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
 import Link from 'next/link';
-import {ThumbsUp, ThumbsDown, Bookmark} from 'lucide-react';
+import {ThumbsUp, ThumbsDown, Bookmark, Menu} from 'lucide-react';
+import {Sheet, SheetContent, SheetTrigger} from '@/components/ui/sheet';
 
 const ITEMS_PER_PAGE = 2;
 
@@ -53,21 +54,58 @@ export default function Home() {
     return allNewsSnippets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [startIndex, allNewsSnippets]);
 
-  const handleScroll = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const container = containerRef.current;
-    if (!container) return;
+  const handleScroll = useCallback(
+    (event: React.WheelEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const container = containerRef.current;
+      if (!container) return;
 
-    const scrollAmount = event.deltaY > 0 ? 1 : -1;
-    const newStartIndex = Math.max(
-      0,
-      Math.min(startIndex + scrollAmount * 2, Math.max(0, allNewsSnippets.length - ITEMS_PER_PAGE))
-    );
-    setStartIndex(newStartIndex);
-  }, [startIndex, allNewsSnippets.length]);
+      const scrollAmount = event.deltaY > 0 ? 1 : -1;
+      const newStartIndex = Math.max(
+        0,
+        Math.min(startIndex + scrollAmount * 2, Math.max(0, allNewsSnippets.length - ITEMS_PER_PAGE))
+      );
+      setStartIndex(newStartIndex);
+    },
+    [startIndex, allNewsSnippets.length]
+  );
 
   return (
     <div className="container mx-auto">
+      {/* Top Navigation Bar */}
+      <div className="flex justify-between items-center p-4">
+        <span className="text-xl font-bold">NewsFlash</span>
+
+        {/* Mobile Hamburger Menu */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64">
+              <Link href="/login">
+                <Button className="w-full mb-2">Login</Button>
+              </Link>
+              <Link href="/register">
+                <Button className="w-full">Register</Button>
+              </Link>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        {/* Desktop Login/Register Buttons */}
+        <div className="hidden md:flex space-x-2">
+          <Link href="/login">
+            <Button variant="outline">Login</Button>
+          </Link>
+          <Link href="/register">
+            <Button>Register</Button>
+          </Link>
+        </div>
+      </div>
+
       {/* News Section */}
       <div className="flex flex-col h-screen">
         {/* Scrollable News Feed */}
@@ -77,10 +115,7 @@ export default function Home() {
           onWheel={handleScroll}
         >
           {allNewsSnippets.map((news, index) => (
-            <div
-              key={index}
-              className="snap-start h-screen flex items-center justify-center p-4"
-            >
+            <div key={index} className="snap-start h-screen flex items-center justify-center p-4">
               <Card className="w-full max-w-md bg-card text-card-foreground shadow-md rounded-lg overflow-hidden">
                 <img
                   src={`https://picsum.photos/id/${index + 10}/600/400`} // Responsive image size
@@ -114,22 +149,12 @@ export default function Home() {
             </div>
           ))}
           {startIndex + ITEMS_PER_PAGE >= allNewsSnippets.length && (
-              <div className="snap-start h-screen flex items-center justify-center p-4">
-                <div className="p-4 bg-secondary rounded-md text-center">
-                  <p>Advertisement</p>
-                </div>
+            <div className="snap-start h-screen flex items-center justify-center p-4">
+              <div className="p-4 bg-secondary rounded-md text-center">
+                <p>Advertisement</p>
               </div>
-            )}
-        </div>
-
-        {/* Bottom Navigation Bar */}
-        <div className="sticky bottom-0 bg-secondary p-4 flex justify-around items-center border-t border-border">
-          <Link href="/login">
-            <Button variant="outline">Login</Button>
-          </Link>
-          <Link href="/register">
-            <Button>Register</Button>
-          </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
