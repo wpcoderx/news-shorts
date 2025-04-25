@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {getNewsSnippets, getPublishers, NewsSnippet, Publisher} from '@/services/news-api';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {Card, CardContent, CardDescription} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
@@ -132,20 +132,15 @@ export default function Home() {
                 {/* News Card */}
                 <div className="snap-start h-screen flex items-center justify-center p-4">
                   <Card className="w-full max-w-md bg-card text-card-foreground shadow-md rounded-lg overflow-hidden">
-                    <CardHeader className="flex items-center space-x-4 p-4">
-                      <CardTitle className="text-lg font-semibold flex items-center">
-                        {news.publisher}
-                      </CardTitle>
-                    </CardHeader>
                     <img
                       src={`https://picsum.photos/id/${index + 10}/600/400`} // Responsive image size
                       alt={news.title}
                       className="object-cover w-full h-64" // Adjust height as needed
                     />
                     <CardContent className="p-4">
-                      <CardHeader className="p-0">
-                        <CardTitle className="text-lg font-semibold">{news.title}</CardTitle>
-                      </CardHeader>
+                      <div className="text-lg font-semibold flex items-center">
+                        {news.publisher}
+                      </div>
                       <CardDescription className="text-sm">{news.snippet}</CardDescription>
                       <div className="mt-2 text-xs text-muted-foreground">
                         Category: {news.category} | Date: {news.date} | Readers: {news.readers}
