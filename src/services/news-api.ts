@@ -56,7 +56,7 @@ export async function getNewsSnippets(publisherName: string): Promise<NewsSnippe
   const snippets: NewsSnippet[] = [];
   const categories = ['Politics', 'Technology', 'Business', 'Sports', 'Entertainment'];
 
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 5; i++) {
     snippets.push({
       title: `News Title ${i} from ${publisherName}`,
       snippet: `This is news snippet ${i} from ${publisherName}. It is limited to 200 characters. `.repeat(2).substring(0, 200),
@@ -90,6 +90,34 @@ export async function getPublishers(): Promise<Publisher[]> {
     {
       name: 'Publisher C',
       logoUrl: 'https://picsum.photos/id/239/200/300'
-    }
+    },
+        {
+      name: 'Publisher D',
+      logoUrl: 'https://picsum.photos/id/240/200/300'
+    },
+    {
+      name: 'Publisher E',
+      logoUrl: 'https://picsum.photos/id/241/200/300'
+    },
+    {
+      name: 'Publisher F',
+      logoUrl: 'https://picsum.photos/id/242/200/300'
+    },
+        {
+      name: 'Publisher G',
+      logoUrl: 'https://picsum.photos/id/243/200/300'
+    },
+    {
+      name: 'Publisher H',
+      logoUrl: 'https://picsum.photos/id/244/200/300'
+    },
+    {
+      name: 'Publisher I',
+      logoUrl: 'https://picsum.photos/id/245/200/300'
+    },
+        {
+      name: 'Publisher J',
+      logoUrl: 'https://picsum.photos/id/246/200/300'
+    },
   ];
 }
