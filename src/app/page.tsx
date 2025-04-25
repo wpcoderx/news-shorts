@@ -5,7 +5,6 @@ import {getNewsSnippets, getPublishers, NewsSnippet, Publisher} from '@/services
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import './globals.css';
 
 const ITEMS_PER_PAGE = 2;
@@ -90,25 +89,42 @@ export default function Home() {
                 className="transition-transform duration-300 ease-in-out"
                 style={{ transform: `translateY(-${startIndex * (100 / ITEMS_PER_PAGE)}%)` }}
               >
-                {visibleNews.map((news, index) => (
-                  <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)]">
-                    <div className="md:w-2/3 p-4">
-                      <CardHeader>
-                        <CardTitle>{news.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription>{news.snippet}</CardDescription>
-                      </CardContent>
-                    </div>
-                    <div className="md:w-1/3">
-                      <img
-                        src={`https://picsum.photos/id/${index + 10}/400/300`} // Different image for each news
-                        alt={news.title}
-                        className="object-cover h-full w-full rounded-r-md"
-                      />
-                    </div>
-                  </Card>
-                ))}
+                {visibleNews.map((news, index) => {
+                  const publisher = publishers.find(p => p.name === news.publisher);
+                  return (
+                    <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)]">
+                      <div className="md:w-2/3 p-4">
+                        <CardHeader>
+                          <CardTitle>{news.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="mb-2">
+                            <span className="text-sm text-muted-foreground">
+                              Publisher: {news.publisher}
+                            </span>
+                            <span className="mx-2 text-sm text-muted-foreground">
+                              Category: {news.category}
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                              Date: {news.date}
+                            </span>
+                          </div>
+                          <CardDescription>{news.snippet}</CardDescription>
+                          <div className="mt-2 text-sm text-muted-foreground">
+                            Readers: {news.readers}
+                          </div>
+                        </CardContent>
+                      </div>
+                      <div className="md:w-1/3">
+                        <img
+                          src={`https://picsum.photos/id/${index + 10}/400/300`} // Different image for each news
+                          alt={news.title}
+                          className="object-cover h-full w-full rounded-r-md"
+                        />
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
               {startIndex + ITEMS_PER_PAGE >= allNewsSnippets.length && (
                 <div className="p-4 bg-secondary rounded-md text-center">

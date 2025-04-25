@@ -1,4 +1,3 @@
-
 /**
  * Represents a news article snippet.
  */
@@ -19,6 +18,18 @@ export interface NewsSnippet {
    * The date the news was published.
    */
   date: string;
+    /**
+   * The name of the publisher.
+   */
+  publisher: string;
+    /**
+   * The category of the news.
+   */
+  category: string;
+  /**
+   * Number of readers
+   */
+  readers: number;
 }
 
 /**
@@ -43,12 +54,17 @@ export interface Publisher {
  */
 export async function getNewsSnippets(publisherName: string): Promise<NewsSnippet[]> {
   const snippets: NewsSnippet[] = [];
+  const categories = ['Politics', 'Technology', 'Business', 'Sports', 'Entertainment'];
+
   for (let i = 1; i <= 50; i++) {
     snippets.push({
       title: `News Title ${i} from ${publisherName}`,
       snippet: `This is news snippet ${i} from ${publisherName}. It is limited to 200 characters. `.repeat(2).substring(0, 200),
       url: `https://example.com/news${i}`,
-      date: `2024-01-${20 + i}`
+      date: `2024-01-${20 + i}`,
+      publisher: publisherName,
+      category: categories[i % categories.length],
+      readers: Math.floor(Math.random() * 1000)
     });
   }
   return snippets;
@@ -77,5 +93,3 @@ export async function getPublishers(): Promise<Publisher[]> {
     }
   ];
 }
-
-    
