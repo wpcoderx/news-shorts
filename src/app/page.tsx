@@ -7,7 +7,7 @@ import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 3;
 
 export default function Home() {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
@@ -46,7 +46,7 @@ export default function Home() {
     const container = containerRef.current;
     if (!container) return;
 
-    const scrollAmount = event.deltaY > 0 ? 1 : -1;
+    const scrollAmount = event.deltaY > 0 ? 2 : -2;
     const newStartIndex = Math.max(
       0,
       Math.min(startIndex + scrollAmount, newsSnippets.length - ITEMS_PER_PAGE)
@@ -92,7 +92,7 @@ export default function Home() {
               >
                 <div
                   className="transition-transform duration-300 ease-in-out"
-                  style={{ transform: `translateY(-${startIndex * 100}%)` }}
+                  style={{ transform: `translateY(-${startIndex * (100 / ITEMS_PER_PAGE)}%)` }}
                 >
                   {newsSnippets.map((news, index) => (
                     <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)]">
@@ -131,4 +131,3 @@ export default function Home() {
     </div>
   );
 }
-
