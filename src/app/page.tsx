@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, {useState, useEffect, useRef} from 'react';
@@ -6,6 +5,7 @@ import {getNewsSnippets, getPublishers, NewsSnippet, Publisher} from '@/services
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Separator} from '@/components/ui/separator';
+import './globals.css';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -87,28 +87,33 @@ export default function Home() {
               <Separator className="mb-4" />
               <div
                 ref={containerRef}
-                className="flex flex-col gap-4 overflow-y-hidden"
+                className="flex flex-col gap-4 overflow-y-hidden h-[calc(100vh - 200px)]"
                 onWheel={handleScroll}
               >
-                {visibleNews.map((news, index) => (
-                  <Card key={index} className="flex flex-col md:flex-row">
-                    <div className="md:w-2/3 p-4">
-                      <CardHeader>
-                        <CardTitle>{news.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription>{news.snippet}</CardDescription>
-                      </CardContent>
-                    </div>
-                    <div className="md:w-1/3">
-                      <img
-                        src={`https://picsum.photos/id/${index + 10}/400/300`} // Different image for each news
-                        alt={news.title}
-                        className="object-cover h-full w-full rounded-r-md"
-                      />
-                    </div>
-                  </Card>
-                ))}
+                <div
+                  className="transition-transform duration-300 ease-in-out"
+                  style={{ transform: `translateY(-${startIndex * 100}%)` }}
+                >
+                  {newsSnippets.map((news, index) => (
+                    <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)]">
+                      <div className="md:w-2/3 p-4">
+                        <CardHeader>
+                          <CardTitle>{news.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <CardDescription>{news.snippet}</CardDescription>
+                        </CardContent>
+                      </div>
+                      <div className="md:w-1/3">
+                        <img
+                          src={`https://picsum.photos/id/${index + 10}/400/300`} // Different image for each news
+                          alt={news.title}
+                          className="object-cover h-full w-full rounded-r-md"
+                        />
+                      </div>
+                    </Card>
+                  ))}
+                </div>
                 {/* Mock Ad Component */}
                 {startIndex + ITEMS_PER_PAGE >= newsSnippets.length && (
                   <div className="p-4 bg-secondary rounded-md text-center">
@@ -126,5 +131,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
