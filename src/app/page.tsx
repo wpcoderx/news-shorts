@@ -1,16 +1,20 @@
 
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {getNewsSnippets, getPublishers, NewsSnippet, Publisher} from '@/services/news-api';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Separator} from '@/components/ui/separator';
 
+const ITEMS_PER_PAGE = 3;
+
 export default function Home() {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [selectedPublisher, setSelectedPublisher] = useState<Publisher | null>(null);
   const [newsSnippets, setNewsSnippets] = useState<NewsSnippet[]>([]);
+  const [startIndex, setStartIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchPublishers = async () => {
@@ -34,6 +38,21 @@ export default function Home() {
 
     fetchNews();
   }, [selectedPublisher]);
+
+  const visibleNews = newsSnippets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handleScroll = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const container = containerRef.current;
+    if (!container) return;
+
+    const scrollAmount = event.deltaY > 0 ? 1 : -1;
+    const newStartIndex = Math.max(
+      0,
+      Math.min(startIndex + scrollAmount, newsSnippets.length - ITEMS_PER_PAGE)
+    );
+    setStartIndex(newStartIndex);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -66,25 +85,37 @@ export default function Home() {
                 News from {selectedPublisher.name}
               </h2>
               <Separator className="mb-4" />
-              <div className="grid gap-4">
-                {newsSnippets.map((news, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle>{news.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription>{news.snippet}</CardDescription>
-                      <a
-                        href={news.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block mt-2 text-blue-500 hover:underline"
-                      >
-                        Read More
-                      </a>
-                    </CardContent>
+              <div
+                ref={containerRef}
+                className="flex flex-col gap-4 overflow-y-hidden"
+                onWheel={handleScroll}
+              >
+                {visibleNews.map((news, index) => (
+                  <Card key={index} className="flex flex-col md:flex-row">
+                    <div className="md:w-2/3 p-4">
+                      <CardHeader>
+                        <CardTitle>{news.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription>{news.snippet}</CardDescription>
+                      </CardContent>
+                    </div>
+                    <div className="md:w-1/3">
+                      <img
+                        src={`https://picsum.photos/id/${index + 10}/400/300`} // Different image for each news
+                        alt={news.title}
+                        className="object-cover h-full w-full rounded-r-md"
+                      />
+                    </div>
                   </Card>
                 ))}
+                {/* Mock Ad Component */}
+                {startIndex + ITEMS_PER_PAGE >= newsSnippets.length && (
+                  <div className="p-4 bg-secondary rounded-md text-center">
+                    <p>Advertisement</p>
+                    {/* Replace with actual ad content */}
+                  </div>
+                )}
               </div>
             </>
           ) : (
@@ -95,3 +126,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
