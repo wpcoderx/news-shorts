@@ -67,10 +67,63 @@ export default function Home() {
   }, [startIndex, allNewsSnippets.length]);
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">NewsFlash</h1>
-        <div className="flex gap-2">
+    <div className="container mx-auto">
+      {/* News Section */}
+      <div className="flex flex-col h-screen">
+        {/* Scrollable News Feed */}
+        <div
+          ref={containerRef}
+          className="flex-grow overflow-y-scroll snap-mandatory snap-y"
+          onWheel={handleScroll}
+        >
+          {allNewsSnippets.map((news, index) => (
+            <div
+              key={index}
+              className="snap-start h-screen flex items-center justify-center p-4"
+            >
+              <Card className="w-full max-w-md bg-card text-card-foreground shadow-md rounded-lg overflow-hidden">
+                <img
+                  src={`https://picsum.photos/id/${index + 10}/600/400`} // Responsive image size
+                  alt={news.title}
+                  className="object-cover w-full h-64" // Adjust height as needed
+                />
+                <CardContent className="p-4">
+                  <CardHeader className="p-0">
+                    <CardTitle className="text-lg font-semibold">{news.title}</CardTitle>
+                  </CardHeader>
+                  <div className="mb-2 text-sm text-muted-foreground">
+                    Publisher: {news.publisher}
+                  </div>
+                  <CardDescription className="text-sm">{news.snippet}</CardDescription>
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    Category: {news.category} | Date: {news.date} | Readers: {news.readers}
+                  </div>
+                  <div className="flex mt-4 justify-around">
+                    <Button variant="ghost" size="icon">
+                      <ThumbsUp className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <ThumbsDown className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <Bookmark className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+          {startIndex + ITEMS_PER_PAGE >= allNewsSnippets.length && (
+              <div className="snap-start h-screen flex items-center justify-center p-4">
+                <div className="p-4 bg-secondary rounded-md text-center">
+                  <p>Advertisement</p>
+                </div>
+              </div>
+            )}
+        </div>
+
+        {/* Bottom Navigation Bar */}
+        <div className="sticky bottom-0 bg-secondary p-4 flex justify-around items-center border-t border-border">
           <Link href="/login">
             <Button variant="outline">Login</Button>
           </Link>
@@ -78,79 +131,6 @@ export default function Home() {
             <Button>Register</Button>
           </Link>
         </div>
-      </div>
-      <div className="w-full">
-        {allNewsSnippets.length > 0 ? (
-          <>
-            <h2 className="text-lg font-semibold mb-2">News</h2>
-            <Separator className="mb-4" />
-            <div
-              ref={containerRef}
-              className="flex flex-col gap-4 overflow-y-hidden h-[calc(100vh - 200px)]"
-              onWheel={handleScroll}
-            >
-              <div
-                className="transition-transform duration-300 ease-in-out"
-                style={{ transform: `translateY(-${startIndex * (100 / ITEMS_PER_PAGE)}%)` }}
-              >
-                {visibleNews.map((news, index) => {
-                  const publisher = publishers.find(p => p.name === news.publisher);
-                  return (
-                    <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)] mb-4">
-                      <div className="md:w-2/3 p-4">
-                        <CardHeader>
-                          <CardTitle>{news.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="mb-2">
-                            <span className="text-sm text-muted-foreground">
-                              Publisher: {news.publisher}
-                            </span>
-                            <span className="mx-2 text-sm text-muted-foreground">
-                              Category: {news.category}
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              Date: {news.date}
-                            </span>
-                          </div>
-                          <CardDescription>{news.snippet}</CardDescription>
-                          <div className="mt-2 text-sm text-muted-foreground">
-                            Readers: {news.readers}
-                          </div>
-                          <div className="flex mt-4 gap-2">
-                            <Button variant="ghost" size="icon">
-                              <ThumbsUp className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon">
-                              <ThumbsDown className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon">
-                              <Bookmark className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </div>
-                      <div className="md:w-1/3">
-                        <img
-                          src={`https://picsum.photos/id/${index + 10}/400/300`} // Different image for each news
-                          alt={news.title}
-                          className="object-cover h-full w-full rounded-r-md"
-                        />
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
-              {startIndex + ITEMS_PER_PAGE >= allNewsSnippets.length && (
-                <div className="p-4 bg-secondary rounded-md text-center">
-                  <p>Advertisement</p>
-                </div>
-              )}
-            </div>
-          </>
-        ) : (
-          <p>Loading news...</p>
-        )}
       </div>
     </div>
   );

@@ -28,7 +28,20 @@ body {
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 218.9 71.7% 46.1%; /* Blue */
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Increased radius for rounded corners */
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --scrollbar-width: 0.5rem; /* Custom scrollbar width */
+    --scrollbar-track: 0 0% 90%; /* Scrollbar track color */
+    --scrollbar-thumb: 220 30% 50%; /* Scrollbar thumb color */
+
+    /* Increased spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+
     --sidebar-background: 210 40% 96.1%; /* Light sidebar background */
     --sidebar-foreground: 220 30% 10%; /* Dark sidebar text */
     --sidebar-primary: 222.2 47.4% 11.2%; /* Primary dark color for sidebar */
@@ -59,6 +72,19 @@ body {
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 210 40% 98%; /* Ring color */
+        --radius: 0.75rem; /* Increased radius for rounded corners */
+    --shadow-sm: 0 1px 3px 0 rgba(255, 255, 255, 0.08), 0 1px 2px 0 rgba(255, 255, 255, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(255, 255, 255, 0.1), 0 10px 10px -5px rgba(255, 255, 255, 0.04);
+    --scrollbar-width: 0.5rem; /* Custom scrollbar width */
+    --scrollbar-track: 220 30% 20%; /* Scrollbar track color */
+    --scrollbar-thumb: 210 40% 50%; /* Scrollbar thumb color */
+
+    /* Increased spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
     --sidebar-background: 222.2 47.4% 11.2%; /* Dark sidebar background */
     --sidebar-foreground: 210 40% 98%; /* Light sidebar text */
     --sidebar-primary: 210 40% 98%; /* Primary light color for sidebar */
@@ -76,6 +102,78 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    @apply antialiased;
+  }
+
+  /* Custom scrollbar styles */
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--scrollbar-track));
+    border-radius: 0.25rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--scrollbar-thumb));
+    border-radius: 0.25rem;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--scrollbar-thumb));
   }
 }
 
+/* Enhanced card styling with shadows and rounded corners */
+.card {
+  @apply rounded-lg shadow-md;
+}
+
+/* Spacing utilities */
+.spacing-sm {
+  padding: var(--spacing-sm);
+}
+
+.spacing-md {
+  padding: var(--spacing-md);
+}
+
+.spacing-lg {
+  padding: var(--spacing-lg);
+}
+
+/* Input style adjustments for a modern look */
+input,
+textarea,
+select {
+  @apply rounded-md border-input shadow-sm focus:ring-primary;
+}
+
+/* Button style enhancements */
+.btn {
+  @apply rounded-md shadow-sm;
+}
+
+/* Add shadow to card-based layouts */
+.card-shadow {
+  box-shadow: var(--shadow-md);
+}
+
+/* Adds a subtle shadow to elements */
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+    box-shadow: var(--shadow-xl);
+}
