@@ -114,40 +114,66 @@ export default function Home() {
           className="flex-grow overflow-y-scroll snap-mandatory snap-y"
           onWheel={handleScroll}
         >
-          {allNewsSnippets.map((news, index) => (
-            <div key={index} className="snap-start h-screen flex items-center justify-center p-4">
-              <Card className="w-full max-w-md bg-card text-card-foreground shadow-md rounded-lg overflow-hidden">
-                <img
-                  src={`https://picsum.photos/id/${index + 10}/600/400`} // Responsive image size
-                  alt={news.title}
-                  className="object-cover w-full h-64" // Adjust height as needed
-                />
-                <CardContent className="p-4">
-                  <CardHeader className="p-0">
-                    <CardTitle className="text-lg font-semibold">{news.title}</CardTitle>
-                  </CardHeader>
-                  <div className="mb-2 text-sm text-muted-foreground">
-                    Publisher: {news.publisher}
+          {allNewsSnippets.map((news, index) => {
+            // Determine if it's time for an ad
+            const showAd = index > 0 && index % 5 === 0;
+
+            return (
+              <React.Fragment key={index}>
+                {/* Conditionally render an ad */}
+                {showAd && (
+                  <div className="snap-start h-screen flex items-center justify-center p-4">
+                    <div className="p-4 bg-secondary rounded-md text-center">
+                      <p>Advertisement</p>
+                    </div>
                   </div>
-                  <CardDescription className="text-sm">{news.snippet}</CardDescription>
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    Category: {news.category} | Date: {news.date} | Readers: {news.readers}
-                  </div>
-                  <div className="flex mt-4 justify-around">
-                    <Button variant="ghost" size="icon">
-                      <ThumbsUp className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon">
-                      <ThumbsDown className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon">
-                      <Bookmark className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
+                )}
+
+                {/* News Card */}
+                <div className="snap-start h-screen flex items-center justify-center p-4">
+                  <Card className="w-full max-w-md bg-card text-card-foreground shadow-md rounded-lg overflow-hidden">
+                    <CardHeader className="flex items-center space-x-4 p-4">
+                      <img
+                        src={publishers.find(p => p.name === news.publisher)?.logoUrl || "https://via.placeholder.com/40"}
+                        alt={news.publisher}
+                        className="rounded-full w-10 h-10"
+                      />
+                      <CardTitle className="text-lg font-semibold">{news.publisher}</CardTitle>
+                    </CardHeader>
+                    <img
+                      src={`https://picsum.photos/id/${index + 10}/600/400`} // Responsive image size
+                      alt={news.title}
+                      className="object-cover w-full h-64" // Adjust height as needed
+                    />
+                    <CardContent className="p-4">
+                      <CardHeader className="p-0">
+                        <CardTitle className="text-lg font-semibold">{news.title}</CardTitle>
+                      </CardHeader>
+                      <CardDescription className="text-sm">{news.snippet}</CardDescription>
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        Category: {news.category} | Date: {news.date} | Readers: {news.readers}
+                      </div>
+                      <div className="flex mt-4 justify-around">
+                        <Button variant="ghost" size="icon">
+                          <ThumbsUp className="h-5 w-5" />
+                        </Button>
+                        <Button variant="ghost" size="icon">
+                          <ThumbsDown className="h-5 w-5" />
+                        </Button>
+                        <Button variant="ghost" size="icon">
+                          <Bookmark className="h-5 w-5" />
+                        </Button>
+                      </div>
+                      {/* Ad space inside each card */}
+                      <div className="mt-4 p-2 bg-muted rounded-md text-center text-xs">
+                        Ad Space
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </React.Fragment>
+            );
+          })}
           {startIndex + ITEMS_PER_PAGE >= allNewsSnippets.length && (
             <div className="snap-start h-screen flex items-center justify-center p-4">
               <div className="p-4 bg-secondary rounded-md text-center">
@@ -160,3 +186,4 @@ export default function Home() {
     </div>
   );
 }
+
