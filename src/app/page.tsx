@@ -7,6 +7,7 @@ import {Button} from '@/components/ui/button';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
 import Link from 'next/link';
+import {ThumbsUp, ThumbsDown, Bookmark} from 'lucide-react';
 
 const ITEMS_PER_PAGE = 2;
 
@@ -81,9 +82,7 @@ export default function Home() {
       <div className="w-full">
         {allNewsSnippets.length > 0 ? (
           <>
-            <h2 className="text-lg font-semibold mb-2">
-              News
-            </h2>
+            <h2 className="text-lg font-semibold mb-2">News</h2>
             <Separator className="mb-4" />
             <div
               ref={containerRef}
@@ -97,7 +96,7 @@ export default function Home() {
                 {visibleNews.map((news, index) => {
                   const publisher = publishers.find(p => p.name === news.publisher);
                   return (
-                    <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)]">
+                    <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)] mb-4">
                       <div className="md:w-2/3 p-4">
                         <CardHeader>
                           <CardTitle>{news.title}</CardTitle>
@@ -117,6 +116,17 @@ export default function Home() {
                           <CardDescription>{news.snippet}</CardDescription>
                           <div className="mt-2 text-sm text-muted-foreground">
                             Readers: {news.readers}
+                          </div>
+                          <div className="flex mt-4 gap-2">
+                            <Button variant="ghost" size="icon">
+                              <ThumbsUp className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon">
+                              <ThumbsDown className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon">
+                              <Bookmark className="h-4 w-4" />
+                            </Button>
                           </div>
                         </CardContent>
                       </div>
@@ -145,4 +155,3 @@ export default function Home() {
     </div>
   );
 }
-
