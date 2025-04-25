@@ -14,7 +14,7 @@ import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {Input} from '@/components/ui/input';
 import {Textarea} from '@/components/ui/textarea';
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 1;
 
 // Function to shuffle array elements
 function shuffleArray<T>(array: T[]): T[] {
@@ -122,8 +122,15 @@ export default function Home() {
       const scrollAmount = event.deltaY > 0 ? 1 : -1;
       const newStartIndex = Math.max(
         0,
-        Math.min(startIndex + scrollAmount * 2, Math.max(0, allNewsSnippets.length - ITEMS_PER_PAGE))
+        Math.min(startIndex + scrollAmount, Math.max(0, allNewsSnippets.length - ITEMS_PER_PAGE))
       );
+
+      // Animate the scroll
+      container.scrollTo({
+        top: (newStartIndex * container.offsetHeight),
+        behavior: 'smooth',
+      });
+
       setStartIndex(newStartIndex);
     },
     [startIndex, allNewsSnippets.length]
