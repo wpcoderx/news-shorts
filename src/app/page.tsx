@@ -140,11 +140,11 @@ export default function Home() {
                     />
                     <CardContent className="p-4">
                       <div className="text-lg font-semibold flex items-center justify-between">
-                        {news.publisher}
-                         <Avatar className="h-6 w-6">
+                        <Avatar className="h-6 w-6 mr-2">
                             <AvatarImage src={`https://picsum.photos/id/${index + 20}/50/50`} alt={news.publisher} />
                               <AvatarFallback>{news.publisher.substring(0, 2)}</AvatarFallback>
                           </Avatar>
+                        {news.publisher}
                       </div>
                       <CardDescription className="text-sm">{news.snippet}</CardDescription>
                       <div className="mt-2 text-xs text-muted-foreground">
