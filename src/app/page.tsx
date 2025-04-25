@@ -1,48 +1,58 @@
 'use client';
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {getNewsSnippets, getPublishers, NewsSnippet, Publisher} from '@/services/news-api';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {Separator} from '@/components/ui/separator';
 import {Button} from '@/components/ui/button';
+import {Separator} from '@/components/ui/separator';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import './globals.css';
 
 const ITEMS_PER_PAGE = 2;
 
+// Function to shuffle array elements
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]; // Create a copy to avoid modifying the original
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 export default function Home() {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
-  const [selectedPublisher, setSelectedPublisher] = useState<Publisher | null>(null);
-  const [newsSnippets, setNewsSnippets] = useState<NewsSnippet[]>([]);
+  const [allNewsSnippets, setAllNewsSnippets] = useState<NewsSnippet[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchPublishers = async () => {
+    const fetchPublishersAndNews = async () => {
       const publisherList = await getPublishers();
       setPublishers(publisherList);
-      if (publisherList.length > 0) {
-        setSelectedPublisher(publisherList[0]);
+
+      // Fetch news from all publishers and combine
+      let allNews: NewsSnippet[] = [];
+      for (const publisher of publisherList) {
+        const snippets = await getNewsSnippets(publisher.name);
+        allNews = allNews.concat(snippets);
       }
+
+      // Sort all news by date and then shuffle for randomness
+      const sortedNews = allNews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      const shuffledNews = shuffleArray(sortedNews);
+      setAllNewsSnippets(shuffledNews);
     };
 
-    fetchPublishers();
+    fetchPublishersAndNews();
   }, []);
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      if (selectedPublisher) {
-        const snippets = await getNewsSnippets(selectedPublisher.name);
-        setNewsSnippets(snippets);
-      }
-    };
+  // Recalculate visible news when startIndex or allNewsSnippets changes
+  const visibleNews = React.useMemo(() => {
+    return allNewsSnippets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [startIndex, allNewsSnippets]);
 
-    fetchNews();
-  }, [selectedPublisher]);
-
-  const visibleNews = newsSnippets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-  const handleScroll = (event: React.WheelEvent<HTMLDivElement>) => {
+  const handleScroll = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
     const container = containerRef.current;
     if (!container) return;
@@ -50,10 +60,10 @@ export default function Home() {
     const scrollAmount = event.deltaY > 0 ? 1 : -1;
     const newStartIndex = Math.max(
       0,
-      Math.min(startIndex + scrollAmount, newsSnippets.length - ITEMS_PER_PAGE)
+      Math.min(startIndex + scrollAmount, Math.max(0, allNewsSnippets.length - ITEMS_PER_PAGE))
     );
     setStartIndex(newStartIndex);
-  };
+  }, [startIndex, allNewsSnippets.length]);
 
   return (
     <div className="container mx-auto p-4">
@@ -65,10 +75,10 @@ export default function Home() {
         </div>
       </div>
       <div className="w-full">
-        {selectedPublisher ? (
+        {allNewsSnippets.length > 0 ? (
           <>
             <h2 className="text-lg font-semibold mb-2">
-              News from {selectedPublisher.name}
+              News
             </h2>
             <Separator className="mb-4" />
             <div
@@ -80,7 +90,7 @@ export default function Home() {
                 className="transition-transform duration-300 ease-in-out"
                 style={{ transform: `translateY(-${startIndex * (100 / ITEMS_PER_PAGE)}%)` }}
               >
-                {newsSnippets.map((news, index) => (
+                {visibleNews.map((news, index) => (
                   <Card key={index} className="flex flex-col md:flex-row h-[calc(100vh - 250px)]">
                     <div className="md:w-2/3 p-4">
                       <CardHeader>
@@ -100,7 +110,7 @@ export default function Home() {
                   </Card>
                 ))}
               </div>
-              {startIndex + ITEMS_PER_PAGE >= newsSnippets.length && (
+              {startIndex + ITEMS_PER_PAGE >= allNewsSnippets.length && (
                 <div className="p-4 bg-secondary rounded-md text-center">
                   <p>Advertisement</p>
                 </div>
@@ -108,7 +118,7 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <p>Select a publisher to view news.</p>
+          <p>Loading news...</p>
         )}
       </div>
     </div>
