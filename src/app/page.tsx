@@ -23,6 +23,46 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
+// Function to generate a variety of content types
+function generateDynamicContent(index: number): React.ReactNode {
+  const contentType = index % 5; // Cycle through 5 types of content
+  const baseText = `This is dynamic content ${index + 1}. `;
+
+  switch (contentType) {
+    case 0: // Bullet points
+      return (
+        <ul>
+          <li>{baseText} Point 1.</li>
+          <li>{baseText} Point 2.</li>
+          <li>{baseText} Point 3.</li>
+        </ul>
+      );
+    case 1: // Quote
+      return (
+        <blockquote>
+          "{baseText} A wise saying."
+          <cite>- Someone</cite>
+        </blockquote>
+      );
+    case 2: // Poll (Placeholder)
+      return (
+        <div>
+          <p>{baseText} Vote now!</p>
+          <Button>Option A</Button>
+          <Button>Option B</Button>
+        </div>
+      );
+    case 3: // Paragraph with emphasis
+      return (
+        <p>
+          {baseText} <em>Important information here.</em>
+        </p>
+      );
+    default: // Regular paragraph
+      return <p>{baseText} Just a regular snippet.</p>;
+  }
+}
+
 export default function Home() {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [allNewsSnippets, setAllNewsSnippets] = useState<NewsSnippet[]>([]);
@@ -146,7 +186,10 @@ export default function Home() {
                           </Avatar>
                         {news.publisher}
                       </div>
-                      <CardDescription className="text-sm">{news.snippet}</CardDescription>
+                      {/* Use dynamic content here */}
+                      <CardDescription className="text-sm">
+                        {generateDynamicContent(index)}
+                      </CardDescription>
                       <div className="mt-2 text-xs text-muted-foreground">
                         Category: {news.category} | Date: {news.date} | Readers: {news.readers}
                       </div>
@@ -183,4 +226,3 @@ export default function Home() {
     </div>
   );
 }
-

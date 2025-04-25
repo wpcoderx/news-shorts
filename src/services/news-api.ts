@@ -56,12 +56,12 @@ export async function getNewsSnippets(publisherName: string): Promise<NewsSnippe
   const snippets: NewsSnippet[] = [];
   const categories = ['Politics', 'Technology', 'Business', 'Sports', 'Entertainment'];
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 50; i++) {
     snippets.push({
       title: `News Title ${i} from ${publisherName}`,
       snippet: `This is news snippet ${i} from ${publisherName}. It is limited to 200 characters. `.repeat(2).substring(0, 200),
       url: `https://example.com/news${i}`,
-      date: `2024-01-${20 + i}`,
+      date: `2024-01-${20 + (i % 10)}`,
       publisher: publisherName,
       category: categories[i % categories.length],
       readers: Math.floor(Math.random() * 1000)
@@ -121,4 +121,3 @@ export async function getPublishers(): Promise<Publisher[]> {
     },
   ];
 }
-
