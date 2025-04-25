@@ -7,7 +7,7 @@ import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Separator} from '@/components/ui/separator';
 import './globals.css';
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 2;
 
 export default function Home() {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
@@ -131,3 +131,4 @@ export default function Home() {
     </div>
   );
 }
+
